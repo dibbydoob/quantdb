@@ -1,10 +1,10 @@
 {
     "eod_key": "6318e406a42036.19146604",
     "fred_key": "",
-    "mongo_db": "thomasar676@gmail.com",
+    "mongo_db": "quant_database",
     "mongo_pw": "qAgpur-fitdi5-pamqoc",
-    "mongo_cluster": "",
-    "mongo_user": "",
+    "mongo_cluster": "AlunMongo",
+    "mongo_user": "thomasar676@gmail.com",
     "oan_acc_id": "",
     "oan_token": "",
     "oan_env": ""

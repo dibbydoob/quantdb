@@ -10,7 +10,7 @@ import oandapyV20 as Oanda
 from fredapi import Fred
 from eod import EodHistoricalData
 
-import db_logs
+
 import securities.fx as fx
 import securities.misc as misc
 import securities.macro as macro

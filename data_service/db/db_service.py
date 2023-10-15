@@ -19,6 +19,7 @@ from concurrent.futures import ProcessPoolExecutor
 from data_service.utils.datetime_utils import get_mongo_datetime_filter
 from data_service.utils.datetime_utils import map_dfreq_to_frequency
 
+
 class DbService():
 
     earliest_utc_cutoff = datetime(1970, 1, 31, tzinfo=pytz.utc)
@@ -242,4 +243,4 @@ class DbService():
         result_dfs = [db_poll[1] for db_poll in db_polls]
         return result_ranges, result_dfs
     
-    
+
