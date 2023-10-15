@@ -11,16 +11,16 @@ from fredapi import Fred
 from eod import EodHistoricalData
 
 
-import securities.fx as fx
-import securities.misc as misc
-import securities.macro as macro
-import securities.crypto as crypto
-import securities.baskets as baskets
-import securities.options as options
-import securities.equities as equities
-import securities.commodities as commodities
-import securities.fixed_income as fixed_income
-import db.db_service as db_service
+import data_service.securities.fx as fx
+import  data_service.securities.misc as misc
+import  data_service.securities.macro as macro
+import  data_service.securities.crypto as crypto
+import  data_service.securities.baskets as baskets
+import  data_service.securities.options as options
+import  data_service.securities.equities as equities
+import  data_service.securities.commodities as commodities
+import  data_service.securities.fixed_income as fixed_income
+import  data_service.db.db_service as db_service
 
 class DataMaster:
 
