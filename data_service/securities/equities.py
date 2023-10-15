@@ -9,13 +9,13 @@ import urllib
 import numpy as np
 import pandas as pd
 
-import db_logs
+import data_service.db_logs as db_logs
 
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 
-import wrappers.eod_wrapper as eod_wrapper
-import wrappers.aiohttp_wrapper as aiohttp_wrapper
+import data_service.wrappers.eod_wrapper as eod_wrapper
+import data_service.wrappers.aiohttp_wrapper as aiohttp_wrapper
 
 class Equities():
 

@@ -11,7 +11,7 @@ import oandapyV20.endpoints.instruments as instruments
 
 from dateutil.relativedelta import relativedelta
 
-import wrappers.eod_wrapper as eod_wrapper
+import data_service.wrappers.eod_wrapper as eod_wrapper
  
 class FX():
         

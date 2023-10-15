@@ -8,9 +8,9 @@ import numpy as np
 import pandas as pd
 
 from dateutil.relativedelta import relativedelta
-from sockets.eod_sockclient import EodSocketClient
+# from sockets.eod_sockclient import EodSocketClient
 
-import wrappers.eod_wrapper as eod_wrapper
+import data_service.wrappers.eod_wrapper as eod_wrapper
 
 class FixedIncome():
 

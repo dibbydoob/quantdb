@@ -8,7 +8,7 @@ import pandas as pd
 
 from dateutil.relativedelta import relativedelta
 
-import wrappers.eod_wrapper as eod_wrapper
+import data_service.wrappers.eod_wrapper as eod_wrapper
 
 class Crypto():
         

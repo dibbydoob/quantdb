@@ -5,8 +5,8 @@ import requests
 import datetime
 import pandas as pd
 
-from cif import cif
-from dbnomics import fetch_series, fetch_series_by_api_link
+#from cif import cif
+#from dbnomics import fetch_series, fetch_series_by_api_link
 
 class Macro():
 
