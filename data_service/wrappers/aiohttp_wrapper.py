@@ -2,7 +2,7 @@ import aiohttp
 import asyncio
 import urllib
 import urllib.parse
-import db_logs
+import data_service.db_logs as db_logs
 
 async def async_aiohttp_get_all(urls, fmt="json"):
     async with aiohttp.ClientSession() as session:

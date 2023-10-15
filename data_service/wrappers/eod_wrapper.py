@@ -11,7 +11,7 @@ import urllib.parse
 
 from dateutil.relativedelta import relativedelta
 
-import wrappers.aiohttp_wrapper as aiohttp_wrapper
+import data_service.wrappers.aiohttp_wrapper as aiohttp_wrapper
 
 def get_fundamental_data(eod_client, ticker, exchange="US"):
     return eod_client.get_fundamental_equity("{}.{}".format(ticker, exchange))
