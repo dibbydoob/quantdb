@@ -2,9 +2,9 @@
     "eod_key": "6318e406a42036.19146604",
     "fred_key": "",
     "mongo_db": "quant_database",
-    "mongo_pw": "qAgpur-fitdi5-pamqoc",
-    "mongo_cluster": "AlunMongo",
-    "mongo_user": "thomasar676@gmail.com",
+    "mongo_pw": "1234",
+    "mongo_cluster": "mongodb+srv://thomasar676:1234@cluster0.ninaexe.mongodb.net/?retryWrites=true&w=majority",
+    "mongo_user": "thomasar676",
     "oan_acc_id": "101-004-26051125-001",
     "oan_token": "cd0ee2864484351df9b9d585ab2dabcc-a21273d09ed5f8d31152dbcc898b49d1",
     "oan_env": "practice"

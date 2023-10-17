@@ -10,17 +10,17 @@ import oandapyV20 as Oanda
 from fredapi import Fred
 from eod import EodHistoricalData
 
-
 import data_service.securities.fx as fx
-import  data_service.securities.misc as misc
-import  data_service.securities.macro as macro
-import  data_service.securities.crypto as crypto
-import  data_service.securities.baskets as baskets
-import  data_service.securities.options as options
-import  data_service.securities.equities as equities
-import  data_service.securities.commodities as commodities
-import  data_service.securities.fixed_income as fixed_income
-import  data_service.db.db_service as db_service
+import data_service.securities.misc as misc
+import data_service.securities.macro as macro
+import data_service.securities.crypto as crypto
+import data_service.securities.baskets as baskets
+import data_service.securities.options as options
+import data_service.securities.equities as equities
+import data_service.securities.commodities as commodities
+import data_service.securities.fixed_income as fixed_income
+import data_service.db.db_service as db_service
+
 
 class DataMaster:
 
@@ -61,13 +61,13 @@ class DataMaster:
 
     def get_equity_service(self):
         return self.equities
-    
+
     def get_fi_service(self):
         return self.fixed_income
-    
+
     def get_misc_service(self):
         return self.misc
-    
+
     def get_commodity_service(self):
         return self.commodities
 
@@ -76,53 +76,54 @@ class DataMaster:
 
     def get_crypto_service(self):
         return self.crypto
-    
+
     def get_basket_service(self):
         return self.baskets
-    
+
     def get_macro_service(self):
         return self.macro
 
     def get_db_service(self):
         return self.db_service
 
+
 async def batch_insert_ohlcv(loop, df):
     API_LIMIT = 300
     print(len(df))
     for i in range(0, len(df), API_LIMIT):
-        print(i , "/" , len(df))
-        temp_df = df.loc[i : i + API_LIMIT - 1]
+        print(i, "/", len(df))
+        temp_df = df.loc[i: i + API_LIMIT - 1]
         ohlcv = await data_master.get_equity_service().asyn_batch_get_ohlcv(
-            tickers=list(temp_df["Code"]), 
-            exchanges=list(["US" for _ in range(len(temp_df))]), 
-            period_days=3000, 
-            read_db=True, 
+            tickers=list(temp_df["Code"]),
+            exchanges=list(["US" for _ in range(len(temp_df))]),
+            period_days=3000,
+            read_db=True,
             insert_db=True
         )
     return True
 
+
 async def batch_get_fundamentals(loop, df, exchange, exchange_filter):
     df = df.loc[df["Exchange"] == exchange_filter].dropna()
-    df = df.loc[df["Type"] == "Commonf Stock"].reset_index(drop=True)
+    df = df.loc[df["Type"] == "Common Stock"].reset_index(drop=True)
     tasks = []
     fundamentals = await data_master.get_equity_service().asyn_batch_get_ticker_generals(
-        tickers=list(df["Code"]), 
-        exchanges=["US" for _ in range(len(df))], 
-        read_db=True, 
+        tickers=list(df["Code"]),
+        exchanges=["US" for _ in range(len(df))],
+        read_db=True,
         insert_db=True
     )
     return fundamentals
 
 
 if __name__ == "__main__":
-    a = datetime.datetime.now() 
+    a = datetime.datetime.now()
     data_master = DataMaster()
     df = data_master.get_misc_service().get_exchange_tickers("US")
     df = df.loc[(df["Exchange"] == "NYSE") | (df["Exchange"] == "NASDAQ")]
-    df = df.loc[df["Type"] == "Common Stock"].dropna().reset_index(drop=True).head(300)
+    df = df.loc[df["Type"] == "Common Stock"].dropna().reset_index(drop=True).head(3000)
 
     loop = asyncio.get_event_loop()
     loop.run_until_complete(batch_insert_ohlcv(loop, df))
 
     print(datetime.datetime.now() - a)
-    
