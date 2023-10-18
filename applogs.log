@@ -1,0 +1,10 @@
+[CRITICAL]-get_ticker_generals FAILED AAPL
+[CRITICAL]-get_ticker_generals FAILED AAPL
+[INFO]-setting up API-client for environment practice
+[DEBUG]-Starting new HTTPS connection (1): eodhistoricaldata.com:443
+[DEBUG]-https://eodhistoricaldata.com:443 "GET /api/fundamentals/AAPL.US?api_token=6318e406a42036.19146604&filter=General HTTP/1.1" 200 None
+[CRITICAL]-get_ticker_generals FAILED AAPL
+[INFO]-setting up API-client for environment practice
+[CRITICAL]-get_ticker_generals FAILED AAPL
+[CRITICAL]-get_ticker_generals FAILED AAPL
+[CRITICAL]-get_ticker_generals FAILED AAPL
