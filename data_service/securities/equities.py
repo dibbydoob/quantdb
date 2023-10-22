@@ -48,7 +48,7 @@ class Equities():
     """
     Fundamentals::General Information
     """
-    def get_ticker_generals(self, ticker, exchange, read_db=True, insert_db=True, expire_db=24*12):
+    def get_ticker_generals(self, ticker, exchange, read_db, insert_db, expire_db=24*12):
         docdata = None
         try:
             doc_identifier = {
@@ -144,8 +144,8 @@ class Equities():
         
         return ticker_generals
 
-    def get_ticker_classification(self, ticker, exchange):
-        ticker_fundamentals = self.get_ticker_generals(ticker=ticker, exchange=exchange)
+    def get_ticker_classification(self, ticker, exchange,read_db, insert_db):
+        ticker_fundamentals = self.get_ticker_generals(ticker=ticker, exchange=exchange,read_db=read_db, insert_db=insert_db)
         return {
             "sector": ticker_fundamentals["Sector"],
             "industry": ticker_fundamentals["Industry"],
@@ -179,9 +179,9 @@ class Equities():
         ticker_fundamentals = self.get_ticker_generals(ticker=ticker, exchange=exchange)
         return ticker_fundamentals["CountryISO"]
 
-    def get_identification_codes(self, ticker="AAPL", exchange="US"):
+    def get_identification_codes(self, read_db, insert_db, ticker, exchange):
         ticker_fundamentals = defaultdict(str)
-        ticker_fundamentals.update(self.get_ticker_generals(ticker=ticker, exchange=exchange))
+        ticker_fundamentals.update(self.get_ticker_generals(ticker=ticker, exchange=exchange, read_db=read_db, insert_db=insert_db))
         return {
             "isin": ticker_fundamentals["ISIN"],
             "cusip": ticker_fundamentals["CUSIP"],
@@ -609,7 +609,7 @@ class Equities():
     def get_ohlcv(self, ticker, exchange, period_end=datetime.datetime.today(), period_start=None, period_days=3650, read_db=True, insert_db=True):
         series_df = None
         try:
-            id_codes = self.get_identification_codes(ticker=ticker, exchange=exchange)
+            id_codes = self.get_identification_codes(ticker=ticker, exchange=exchange,read_db=read_db,insert_db=insert_db)
             series_metadata, series_identifier = self._get_series_identifiers_and_metadata(
                 isin=id_codes["isin"],
                 ticker=ticker,
