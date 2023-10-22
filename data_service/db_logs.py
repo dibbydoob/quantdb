@@ -23,7 +23,7 @@ class DBLogs:
                     'INFO': 'green',
                     'WARNING': 'yellow',
                     'ERROR': 'red',
-                    'CRITICAL': 'black,bg_white',
+                    'CRITICAL': 'red',
                 }
             )
             c_handler.setFormatter(color_formatter)
