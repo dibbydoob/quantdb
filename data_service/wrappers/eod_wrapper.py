@@ -96,3 +96,37 @@ def get_intraday_data(ticker="", exchange="US", interval="5m", to_utc=datetime.d
     resp = requests.get(url, params=params)
     df = pd.DataFrame(resp.json()).reset_index(drop=True).set_index("datetime")
     return df
+
+
+async def new_asyn_batch_get_ohlcv(tickers, exchanges, period_end=datetime.datetime.today(), period_start=None, period_days=3650):
+    urls = []
+    params = {
+        "api_token": os.getenv('EOD_KEY'),
+
+        "fmt": "json",
+        "from": period_start.strftime('%Y-%m-%d') if period_start else (period_end - datetime.timedelta(days=period_days)).strftime('%Y-%m-%d'),
+        "to": period_end.strftime('%Y-%m-%d')
+    }
+    results = []
+    for ticker, exchange in zip(tickers, exchanges):
+        url = "https://eodhistoricaldata.com/api/eod/{}.{}?".format(ticker, exchange)
+        urls.append(url + urllib.parse.urlencode(params))
+    results = await aiohttp_wrapper.async_aiohttp_get_all(urls)
+
+    # Initialize an empty dictionary
+    dfs = {}
+
+    for ticker, result in zip(tickers, results):  # Include tickers in your loop
+        if result is None:
+            dfs[ticker] = None  # Use ticker symbol as key
+            continue
+        df = pd.DataFrame(result)
+
+        # Rest of your DataFrame processing code...
+        df.rename(columns={"date": "datetime", "adjusted_close": "adj_close"}, inplace=True)
+        if len(df) > 0:
+            df["datetime"] = pd.to_datetime(df["datetime"])
+
+        dfs[ticker] = df  # Use ticker symbol as key
+
+    return dfs

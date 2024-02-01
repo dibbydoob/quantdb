@@ -96,7 +96,7 @@ class Equities():
             db_logs.DBLogs().critical("asyn_get_ticker_generals FAILED {}".format(ticker))
         return docdata
     
-    async def asyn_batch_get_ticker_generals(self, tickers, exchanges, read_db=True, insert_db=True, expire_db=24*12):
+    async def asyn_batch_get_ticker_generals(self, tickers, exchanges, read_db=False, insert_db=False, expire_db=24*12):
         doc_identifiers = [{
             "type": "ticker_generals",
             "ticker": ticker,

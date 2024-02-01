@@ -45,46 +45,46 @@ class DataMaster:
             "fred_client": self.fred_client,
             "oanda_client": self.oanda_client
         }
-        self.db_service = db_service.DbService()
-        self.fx = fx.FX(data_clients=self.data_clients, db_service=self.db_service)
-        self.misc = misc.Miscellaneous(data_clients=self.data_clients, db_service=self.db_service)
-        self.macro = macro.Macro(data_clients=self.data_clients, db_service=self.db_service)
-        self.crypto = crypto.Crypto(data_clients=self.data_clients, db_service=self.db_service)
-        self.commodities = commodities.Commodities(data_clients=self.data_clients, db_service=self.db_service)
-        self.baskets = baskets.Baskets(data_clients=self.data_clients, db_service=self.db_service)
-        self.equities = equities.Equities(data_clients=self.data_clients, db_service=self.db_service)
-        self.fixed_income = fixed_income.FixedIncome(data_clients=self.data_clients, db_service=self.db_service)
-        self.options = options.Options(data_clients=self.data_clients, db_service=self.db_service)
+        # self.db_service = db_service.DbService()
+        # self.fx = fx.FX(data_clients=self.data_clients, db_service=self.db_service)
+        # self.misc = misc.Miscellaneous(data_clients=self.data_clients, db_service=self.db_service)
+        # self.macro = macro.Macro(data_clients=self.data_clients, db_service=self.db_service)
+        # self.crypto = crypto.Crypto(data_clients=self.data_clients, db_service=self.db_service)
+        # self.commodities = commodities.Commodities(data_clients=self.data_clients, db_service=self.db_service)
+        # self.baskets = baskets.Baskets(data_clients=self.data_clients, db_service=self.db_service)
+        self.equities = equities.Equities(data_clients=self.data_clients, db_service=None)
+        # self.fixed_income = fixed_income.FixedIncome(data_clients=self.data_clients, db_service=self.db_service)
+        # self.options = options.Options(data_clients=self.data_clients, db_service=self.db_service)
 
-    def get_fx_service(self):
-        return self.fx
+    # def get_fx_service(self):
+    #     return self.fx
 
     def get_equity_service(self):
         return self.equities
 
-    def get_fi_service(self):
-        return self.fixed_income
+    # def get_fi_service(self):
+    #     return self.fixed_income
+    #
+    # def get_misc_service(self):
+    #     return self.misc
+    #
+    # def get_commodity_service(self):
+    #     return self.commodities
+    #
+    # def get_option_service(self):
+    #     return self.options
+    #
+    # def get_crypto_service(self):
+    #     return self.crypto
 
-    def get_misc_service(self):
-        return self.misc
-
-    def get_commodity_service(self):
-        return self.commodities
-
-    def get_option_service(self):
-        return self.options
-
-    def get_crypto_service(self):
-        return self.crypto
-
-    def get_basket_service(self):
-        return self.baskets
-
-    def get_macro_service(self):
-        return self.macro
-
-    def get_db_service(self):
-        return self.db_service
+    # def get_basket_service(self):
+    #     return self.baskets
+    #
+    # def get_macro_service(self):
+    #     return self.macro
+    #
+    # def get_db_service(self):
+    #     return self.db_service
 
 
 async def batch_insert_ohlcv(loop, df):
@@ -119,11 +119,12 @@ async def batch_get_fundamentals(loop, df, exchange, exchange_filter):
 if __name__ == "__main__":
     a = datetime.datetime.now()
     data_master = DataMaster()
-    df = data_master.get_misc_service().get_exchange_tickers("US")
-    df = df.loc[(df["Exchange"] == "NYSE") | (df["Exchange"] == "NASDAQ")]
-    df = df.loc[df["Type"] == "Common Stock"].dropna().reset_index(drop=True).head(3000)
-
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(batch_insert_ohlcv(loop, df))
-
-    print(datetime.datetime.now() - a)
+    df = data_master.get_equity_service().get_ticker_earnings_history(ticker='AAPL', exchange='US')
+    # df = data_master.get_misc_service().get_exchange_tickers("US")
+    # df = df.loc[(df["Exchange"] == "NYSE") | (df["Exchange"] == "NASDAQ")]
+    # df = df.loc[df["Type"] == "Common Stock"].dropna().reset_index(drop=True).head(3000)
+    #
+    # loop = asyncio.get_event_loop()
+    # loop.run_until_complete(batch_insert_ohlcv(loop, df))
+    #
+    # print(datetime.datetime.now() - a)
