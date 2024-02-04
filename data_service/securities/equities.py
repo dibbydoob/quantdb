@@ -336,8 +336,12 @@ class Equities():
         return self.eod_client.get_fundamental_equity("{}.{}".format(ticker, exchange), filter_='Earnings')
 
     def get_ticker_earnings_history(self, ticker, exchange):
-        resp = self.get_ticker_earnings(ticker=ticker, exchange=exchange)["History"]
-        return pd.DataFrame(resp).transpose().iloc[::-1]
+        resp = self.get_ticker_earnings(ticker=ticker, exchange=exchange)
+
+        if resp != 'NA' and isinstance(resp, dict) and 'History' in resp and resp is not None:
+            return pd.DataFrame(resp['History']).transpose().iloc[::-1]
+        else:
+            return None
 
     def get_ticker_earnings_trend(self, ticker, exchange):
         resp = self.get_ticker_earnings(ticker=ticker, exchange=exchange)["Trend"]
@@ -508,20 +512,30 @@ class Equities():
         if resp.status_code == 200:
             return pd.DataFrame(resp.json()["earnings"])
 
-    def get_ticker_earnings_trend(self, ticker, exchange):
-        url = 'https://eodhistoricaldata.com/api/calendar/trends'
-        params = {
-            "api_token": os.getenv('EOD_KEY'), 
-            "symbols": "{}.{}".format(ticker, exchange),
+    class Equities:
+
+        URL = 'https://eodhistoricaldata.com/api/calendar/trends'
+    EOD_API_TOKEN = os.getenv('EOD_KEY')
+
+    def build_params(self, ticker, exchange):
+        return {
+            "api_token": self.EOD_API_TOKEN,
+            "symbols": f"{ticker}.{exchange}",
             "fmt": "json",
             "from": "1990-01-01",
-            "to": (datetime.datetime.today() + datetime.timedelta(days = 90)).strftime('%Y-%m-%d')
+            "to": (datetime.datetime.today() + datetime.timedelta(days=90)).strftime('%Y-%m-%d')
         }
-        resp = requests.get(url, params=params)
-        if resp.status_code == 200:
-            return pd.DataFrame(resp.json()["trends"][0]).iloc[::-1].reset_index(drop=True)
+
+    def process_response(self, response):
+        if response.status_code == 200:
+            return pd.DataFrame(response.json()["trends"][0]).iloc[::-1].reset_index(drop=True)
         else:
-            raise HttpException()
+            raise Exception
+
+    def get_ticker_earnings_trend(self, ticker, exchange):
+        params = self.build_params(ticker, exchange)
+        response = requests.get(self.URL, params=params)
+        return self.process_response(response)
 
     def get_nearby_ipos(self):
         url = 'https://eodhistoricaldata.com/api/calendar/ipos'
@@ -752,3 +766,4 @@ class Equities():
     
     def get_intraday_data(self, ticker="", exchange="US", interval="5m", to_utc=datetime.datetime.utcnow(), period_days=120):
         return eod_wrapper.get_intraday_data(ticker=ticker, exchange=exchange, interval=interval, to_utc=to_utc, period_days=period_days)
+

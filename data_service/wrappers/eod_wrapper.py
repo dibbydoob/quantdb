@@ -101,7 +101,7 @@ def get_intraday_data(ticker="", exchange="US", interval="5m", to_utc=datetime.d
 async def new_asyn_batch_get_ohlcv(tickers, exchanges, period_end=datetime.datetime.today(), period_start=None, period_days=3650):
     urls = []
     params = {
-        "api_token": os.getenv('EOD_KEY'),
+        "api_token": os.getenv('EOD_API_KEY'),
 
         "fmt": "json",
         "from": period_start.strftime('%Y-%m-%d') if period_start else (period_end - datetime.timedelta(days=period_days)).strftime('%Y-%m-%d'),
@@ -128,5 +128,36 @@ async def new_asyn_batch_get_ohlcv(tickers, exchanges, period_end=datetime.datet
             df["datetime"] = pd.to_datetime(df["datetime"])
 
         dfs[ticker] = df  # Use ticker symbol as key
+
+    return dfs
+
+async def new_asyn_batch_get_historical_earnings(tickers, exchanges):
+    urls = []
+    params = {
+        "api_token": os.getenv('EOD_API_KEY'),
+
+        "fmt": "json"
+    }
+    results = []
+    for ticker, exchange in zip(tickers, exchanges):
+        url = f"https://eodhd.com/api/fundamentals/{ticker}.{exchange}?api_token={params['api_token']}&fmt={params['fmt']}"
+        urls.append(url)
+    results = await aiohttp_wrapper.async_aiohttp_get_all(urls)
+
+    # Initialize an empty dictionary
+    dfs = {}
+
+    for ticker, result in zip(tickers, results):  # Include tickers in your loop
+        if result is None:
+            dfs[ticker] = None  # Use ticker symbol as key
+            continue
+        if 'Earnings' not in result:
+            dfs[ticker] = None  # Use ticker symbol as key
+            continue
+        if 'History' not in result['Earnings']:
+            dfs[ticker] = None  # Use ticker symbol as key
+            continue
+
+        dfs[ticker] = pd.DataFrame(result['Earnings']['History']).transpose().iloc[::-1]
 
     return dfs
